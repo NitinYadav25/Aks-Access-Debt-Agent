@@ -69,7 +69,13 @@ export class FreshnessEvaluator {
         const workdayStatus = workdayRecord.payload.status;
         const oktaStatus = oktaRecord.payload.status;
 
-        if (workdayStatus && oktaStatus && workdayStatus !== oktaStatus) {
+        const isInactive = (s: unknown) => s === 'terminated' || s === 'suspended' || s === 'deprovisioned';
+        const isActive = (s: unknown) => s === 'active';
+        const isStatusConflict =
+          (isActive(workdayStatus) && isInactive(oktaStatus)) ||
+          (isInactive(workdayStatus) && isActive(oktaStatus));
+
+        if (isStatusConflict) {
           conflicts.push({
             entity_id: subjectNode.id,
             field: 'status',
