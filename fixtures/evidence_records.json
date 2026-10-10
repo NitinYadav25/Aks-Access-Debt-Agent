@@ -95,6 +95,45 @@
     "synced_at": "2026-10-09T18:15:00.000Z"
   },
   {
+    "id": "ev_wd_priya",
+    "source_system": "workday",
+    "entity_type": "Worker",
+    "external_id": "wd_emp_8821",
+    "payload": {
+      "user_id": "usr_priya_nair",
+      "email": "priya.nair@partner.example.com",
+      "status": "terminated"
+    },
+    "observed_at": "2026-09-20T00:00:00.000Z",
+    "synced_at": "2026-09-20T00:05:00.000Z"
+  },
+  {
+    "id": "ev_okta_priya",
+    "source_system": "okta",
+    "entity_type": "User",
+    "external_id": "okta_usr_8821",
+    "payload": {
+      "user_id": "usr_priya_nair",
+      "email": "priya.nair@partner.example.com",
+      "status": "active"
+    },
+    "observed_at": "2026-06-01T00:00:00.000Z",
+    "synced_at": "2026-06-01T00:05:00.000Z"
+  },
+  {
+    "id": "ev_okta_stale",
+    "source_system": "okta",
+    "entity_type": "User",
+    "external_id": "okta_usr_old",
+    "payload": {
+      "user_id": "usr_stale_audit",
+      "email": "stale.audit@example.com",
+      "status": "active"
+    },
+    "observed_at": "2026-05-01T00:00:00.000Z",
+    "synced_at": "2026-05-01T00:05:00.000Z"
+  },
+  {
     "id": "ev_gh_billing_repo",
     "source_system": "github",
     "entity_type": "Repository",

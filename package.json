@@ -9,6 +9,7 @@
     "start": "next start",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "bench": "vitest run tests/benchmark",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [

@@ -199,11 +199,18 @@ export class AksAgentOrchestrator {
     let simulationResult: SimulationResult | undefined = undefined;
     let recommendedRemediation = undefined;
 
-    if (freshnessAssessment.verdict === 'CONFLICT') {
-      // Scenario 3: Conflicting source records trigger INSUFFICIENT_DATA
+    if (freshnessAssessment.verdict === 'STALE') {
+      uncertaintyNotes.push(freshnessAssessment.summary);
+    }
+
+    if (freshnessAssessment.verdict === 'CONFLICT' || freshnessAssessment.verdict === 'STALE') {
+      // Conflicting or stale source records trigger INSUFFICIENT_DATA
       verdict = 'INSUFFICIENT_DATA';
       verdictBadge = 'INSUFFICIENT_DATA';
-      summaryExplanation = `Investigation halted: Conflicting source records detected for ${intent.subject_name}. HR records state employment terminated, while Okta SSO data reflects an active status last synced > 90 days ago. Automated remediation is blocked until identity sources are reconciled.`;
+      summaryExplanation =
+        freshnessAssessment.verdict === 'CONFLICT'
+          ? `Investigation halted: Conflicting source records detected for ${intent.subject_name}. Automated remediation is blocked until identity sources are reconciled.`
+          : `Investigation halted: Stale source records detected for ${intent.subject_name}. ${freshnessAssessment.summary} Automated remediation is blocked until sources are verified.`;
     } else if (pathsResponse.paths.length === 0) {
       // Scenario 4: Clean data with no access path
       verdict = 'NO_PATH_FOUND';

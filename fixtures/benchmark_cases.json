@@ -1,0 +1,213 @@
+[
+  {
+    "id": "case_01",
+    "name": "Departed Contractor Nested Access Path",
+    "question": "Can Nisha Patel reach billing-api indirectly?",
+    "subject_id": "usr_nisha_patel",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "HIGH_RISK_PATH",
+    "expected_hops": 4,
+    "is_remediation_expected": true
+  },
+  {
+    "id": "case_02",
+    "name": "Current Employee Legitimate Access Verification",
+    "question": "Can Alex Rivera access billing-api?",
+    "subject_id": "usr_alex_rivera",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "LEGITIMATE_ACCESS",
+    "expected_hops": 3,
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_03",
+    "name": "Stale/Conflicting Source Record (Uncertainty)",
+    "question": "Can Marcus Vance access customer PII cloud storage?",
+    "subject_id": "usr_marcus_vance",
+    "target_id": "cloud_customer_pii",
+    "expected_verdict": "INSUFFICIENT_DATA",
+    "expected_badge": "INSUFFICIENT_DATA",
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_04",
+    "name": "Fresh Data Verified Absence of Path",
+    "question": "Does Liam Chen have access to billing-api?",
+    "subject_id": "usr_liam_chen",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "NO_PATH_FOUND",
+    "expected_badge": "SAFE_NO_PATH",
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_05",
+    "name": "Dormant Contractor Access to Production Billing",
+    "question": "Does dormant contractor Carlos Mendez have access to billing-api?",
+    "subject_id": "usr_carlos_mendez",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "HIGH_RISK_PATH",
+    "expected_hops": 4,
+    "is_remediation_expected": true
+  },
+  {
+    "id": "case_06",
+    "name": "Terminated Contractor Cloud IAM Role Assumption",
+    "question": "Can Tanya Ross reach s3-customer-pii-production?",
+    "subject_id": "usr_tanya_ross",
+    "target_id": "cloud_customer_pii",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "HIGH_RISK_PATH",
+    "expected_hops": 3,
+    "is_remediation_expected": true
+  },
+  {
+    "id": "case_07",
+    "name": "Engineering Lead Legitimate Repository Ownership",
+    "question": "Does Emily Zhang own billing-api?",
+    "subject_id": "usr_emily_zhang",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "LEGITIMATE_ACCESS",
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_08",
+    "name": "Deep 5-Hop Nested Access Debt",
+    "question": "Can terminated contractor Raj Sharma reach billing-api?",
+    "subject_id": "usr_raj_sharma",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "HIGH_RISK_PATH",
+    "expected_hops": 5,
+    "is_remediation_expected": true
+  },
+  {
+    "id": "case_09",
+    "name": "Stale Ingestion TTL Exceeded Record",
+    "question": "Does Stale Record Identity have access to customer PII?",
+    "subject_id": "usr_stale_audit",
+    "target_id": "cloud_customer_pii",
+    "expected_verdict": "INSUFFICIENT_DATA",
+    "expected_badge": "INSUFFICIENT_DATA",
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_10",
+    "name": "Active Security Auditor Access Verification",
+    "question": "Does Devon Scott have legitimate read access to billing-api?",
+    "subject_id": "usr_devon_scott",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "LEGITIMATE_ACCESS",
+    "expected_hops": 3,
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_11",
+    "name": "Deprovisioned Intern Zero-Access Verification",
+    "question": "Can deprovisioned intern Jordan Lee reach billing-api?",
+    "subject_id": "usr_jordan_lee",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "NO_PATH_FOUND",
+    "expected_badge": "SAFE_NO_PATH",
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_12",
+    "name": "Conflicting Cross-System Records Block Remediation",
+    "question": "Can Priya Nair access customer PII?",
+    "subject_id": "usr_priya_nair",
+    "target_id": "cloud_customer_pii",
+    "expected_verdict": "INSUFFICIENT_DATA",
+    "expected_badge": "INSUFFICIENT_DATA",
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_13",
+    "name": "Orphaned Service Account Residual Privilege",
+    "question": "Can dormant service account sa-backup-worker access customer PII?",
+    "subject_id": "sa_backup_worker",
+    "target_id": "cloud_customer_pii",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "HIGH_RISK_PATH",
+    "expected_hops": 2,
+    "is_remediation_expected": true
+  },
+  {
+    "id": "case_14",
+    "name": "Senior Platform Engineer Legitimate Access",
+    "question": "Does Elena Rostova have valid access to billing-api?",
+    "subject_id": "usr_elena_rostova",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "LEGITIMATE_ACCESS",
+    "expected_hops": 3,
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_15",
+    "name": "Terminated Contractor Nested Inheritance",
+    "question": "Can Hannah Abbott access billing-api?",
+    "subject_id": "usr_hannah_abbott",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "HIGH_RISK_PATH",
+    "expected_hops": 4,
+    "is_remediation_expected": true
+  },
+  {
+    "id": "case_16",
+    "name": "Active Employee Documentation Access",
+    "question": "Can Sarah Connor access public-docs?",
+    "subject_id": "usr_sarah_connor",
+    "target_id": "repo_public_docs",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "LEGITIMATE_ACCESS",
+    "expected_hops": 2,
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_17",
+    "name": "Fresh Deprovisioned Identity Clean Verification",
+    "question": "Can Fresh Deprovisioned User access billing-api?",
+    "subject_id": "usr_fresh_departed",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "NO_PATH_FOUND",
+    "expected_badge": "SAFE_NO_PATH",
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_18",
+    "name": "Active UX Engineer Standard Access",
+    "question": "Can Lucas Gray access public documentation?",
+    "subject_id": "usr_lucas_gray",
+    "target_id": "repo_public_docs",
+    "expected_verdict": "PATH_FOUND",
+    "expected_badge": "LEGITIMATE_ACCESS",
+    "expected_hops": 2,
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_19",
+    "name": "Intern Target Segregation Verification",
+    "question": "Can Liam Chen access customer PII in AWS?",
+    "subject_id": "usr_liam_chen",
+    "target_id": "cloud_customer_pii",
+    "expected_verdict": "NO_PATH_FOUND",
+    "expected_badge": "SAFE_NO_PATH",
+    "is_remediation_expected": false
+  },
+  {
+    "id": "case_20",
+    "name": "Contractor Boundary Isolation Verification",
+    "question": "Does Carlos Mendez have access to public-docs?",
+    "subject_id": "usr_carlos_mendez",
+    "target_id": "repo_public_docs",
+    "expected_verdict": "NO_PATH_FOUND",
+    "expected_badge": "SAFE_NO_PATH",
+    "is_remediation_expected": false
+  }
+]

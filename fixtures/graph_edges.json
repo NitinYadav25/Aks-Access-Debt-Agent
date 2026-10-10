@@ -145,5 +145,149 @@
       "observed_at": "2026-07-07T00:00:00.000Z",
       "confidence": 0.95
     }
+  },
+  {
+    "id": "edge_carlos_contractors",
+    "source_id": "usr_carlos_mendez",
+    "target_id": "grp_contractors_dev",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_carlos",
+      "observed_at": "2026-10-01T12:00:00.000Z",
+      "confidence": 0.95
+    }
+  },
+  {
+    "id": "edge_tanya_cloud",
+    "source_id": "usr_tanya_ross",
+    "target_id": "grp_contractors_cloud",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_tanya",
+      "observed_at": "2026-09-15T00:00:00.000Z",
+      "confidence": 0.95
+    }
+  },
+  {
+    "id": "edge_raj_outer",
+    "source_id": "usr_raj_sharma",
+    "target_id": "grp_contractors_external",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_raj",
+      "observed_at": "2026-09-12T00:00:00.000Z",
+      "confidence": 0.95
+    }
+  },
+  {
+    "id": "edge_outer_dev",
+    "source_id": "grp_contractors_external",
+    "target_id": "grp_contractors_dev",
+    "type": "NESTED_IN",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_nest_outer",
+      "observed_at": "2026-09-12T00:00:00.000Z",
+      "confidence": 0.95
+    }
+  },
+  {
+    "id": "edge_stale_cloud",
+    "source_id": "usr_stale_audit",
+    "target_id": "grp_contractors_cloud",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_stale",
+      "observed_at": "2026-05-01T00:00:00.000Z",
+      "confidence": 0.5
+    }
+  },
+  {
+    "id": "edge_sarah_docs",
+    "source_id": "usr_sarah_connor",
+    "target_id": "grp_marketing_interns",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_sarah",
+      "observed_at": "2026-10-09T18:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_sa_analyst",
+    "source_id": "sa_backup_worker",
+    "target_id": "role_data_analyst",
+    "type": "ASSUMES_ROLE",
+    "provenance": {
+      "source_system": "aws_iam",
+      "source_record_id": "aws_bind_sa",
+      "observed_at": "2026-09-01T00:00:00.000Z",
+      "confidence": 0.9
+    }
+  },
+  {
+    "id": "edge_devon_eng",
+    "source_id": "usr_devon_scott",
+    "target_id": "grp_engineering_core",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_devon",
+      "observed_at": "2026-10-10T08:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_elena_eng",
+    "source_id": "usr_elena_rostova",
+    "target_id": "grp_engineering_core",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_elena",
+      "observed_at": "2026-10-10T08:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_hannah_contractors",
+    "source_id": "usr_hannah_abbott",
+    "target_id": "grp_contractors_dev",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_hannah",
+      "observed_at": "2026-09-18T00:00:00.000Z",
+      "confidence": 0.95
+    }
+  },
+  {
+    "id": "edge_lucas_marketing",
+    "source_id": "usr_lucas_gray",
+    "target_id": "grp_marketing_interns",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_lucas",
+      "observed_at": "2026-10-10T06:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_priya_cloud",
+    "source_id": "usr_priya_nair",
+    "target_id": "grp_contractors_cloud",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_mem_priya",
+      "observed_at": "2026-06-01T00:00:00.000Z",
+      "confidence": 0.8
+    }
   }
 ]
