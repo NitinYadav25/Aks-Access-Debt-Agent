@@ -1,0 +1,255 @@
+[
+  {
+    "id": "usr_nisha_patel",
+    "type": "Identity",
+    "name": "Nisha Patel",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "status": "terminated",
+      "is_contractor": true,
+      "contract_end_date": "2026-09-10T00:00:00.000Z",
+      "last_login_at": "2026-08-30T14:22:00.000Z",
+      "department": "External Billing Contractors",
+      "email": "nisha.contractor@partner.example.com",
+      "owner_id": "usr_emily_zhang"
+    },
+    "provenance": {
+      "source_system": "workday",
+      "source_record_id": "wd_emp_98231",
+      "observed_at": "2026-09-10T02:00:00.000Z",
+      "confidence": 0.98
+    }
+  },
+  {
+    "id": "usr_alex_rivera",
+    "type": "Identity",
+    "name": "Alex Rivera",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "status": "active",
+      "is_contractor": false,
+      "last_login_at": "2026-10-10T08:15:00.000Z",
+      "department": "Core Infrastructure",
+      "email": "alex.rivera@example.com",
+      "owner_id": "usr_emily_zhang"
+    },
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_usr_44012",
+      "observed_at": "2026-10-10T08:30:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "usr_marcus_vance",
+    "type": "Identity",
+    "name": "Marcus Vance",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "status": "terminated",
+      "is_contractor": true,
+      "contract_end_date": "2026-09-30T00:00:00.000Z",
+      "last_login_at": "2026-07-07T11:00:00.000Z",
+      "department": "Data Science Contractors",
+      "email": "marcus.vance@partner.example.com",
+      "owner_id": "usr_david_kim"
+    },
+    "provenance": {
+      "source_system": "workday",
+      "source_record_id": "wd_emp_77190",
+      "observed_at": "2026-09-30T04:00:00.000Z",
+      "confidence": 0.95
+    }
+  },
+  {
+    "id": "usr_liam_chen",
+    "type": "Identity",
+    "name": "Liam Chen",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "status": "dormant",
+      "is_contractor": false,
+      "last_login_at": "2026-10-09T16:00:00.000Z",
+      "department": "Product Documentation Interns",
+      "email": "liam.chen@example.com",
+      "owner_id": "usr_sarah_connor"
+    },
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_usr_55198",
+      "observed_at": "2026-10-09T18:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "usr_emily_zhang",
+    "type": "Identity",
+    "name": "Emily Zhang",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "status": "active",
+      "is_contractor": false,
+      "last_login_at": "2026-10-10T09:00:00.000Z",
+      "department": "Engineering Leadership",
+      "email": "emily.zhang@example.com"
+    },
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_usr_11002",
+      "observed_at": "2026-10-10T09:15:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "grp_contractors_dev",
+    "type": "Group",
+    "name": "contractors-dev",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "owner_id": "usr_emily_zhang",
+      "description": "Legacy Okta security group for billing contract developers"
+    },
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_grp_3321",
+      "observed_at": "2026-09-10T02:00:00.000Z",
+      "confidence": 0.95
+    }
+  },
+  {
+    "id": "grp_engineering_core",
+    "type": "Group",
+    "name": "engineering-core",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "owner_id": "usr_emily_zhang",
+      "description": "GitHub engineering team group"
+    },
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_team_5512",
+      "observed_at": "2026-10-09T10:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "grp_contractors_cloud",
+    "type": "Group",
+    "name": "contractors-cloud",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "owner_id": "usr_david_kim",
+      "description": "AWS IAM-synced group for external analytics"
+    },
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_grp_8819",
+      "observed_at": "2026-07-07T00:00:00.000Z",
+      "confidence": 0.6
+    }
+  },
+  {
+    "id": "grp_marketing_interns",
+    "type": "Group",
+    "name": "marketing-interns",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "owner_id": "usr_sarah_connor",
+      "description": "General documentation & content group"
+    },
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_grp_1029",
+      "observed_at": "2026-10-09T18:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "role_repo_reader",
+    "type": "Role",
+    "name": "repo-reader",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "cloud_provider": "github",
+      "description": "GitHub team base reader role"
+    },
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_role_102",
+      "observed_at": "2026-10-08T12:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "role_data_analyst",
+    "type": "Role",
+    "name": "analytics-reader-role",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "cloud_provider": "aws",
+      "arn": "arn:aws:iam::123456789012:role/AnalyticsReaderRole",
+      "description": "AWS IAM Role with S3 Read permissions"
+    },
+    "provenance": {
+      "source_system": "aws_iam",
+      "source_record_id": "aws_role_9921",
+      "observed_at": "2026-07-07T00:00:00.000Z",
+      "confidence": 0.8
+    }
+  },
+  {
+    "id": "repo_billing_api",
+    "type": "Repository",
+    "name": "billing-api",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "sensitivity_label": "high",
+      "owner_id": "usr_emily_zhang",
+      "cloud_provider": "github",
+      "description": "PCI-DSS in-scope payment processing backend service"
+    },
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_repo_9088",
+      "observed_at": "2026-10-10T01:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "cloud_customer_pii",
+    "type": "CloudResource",
+    "name": "s3-customer-pii-production",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "sensitivity_label": "high",
+      "cloud_provider": "aws",
+      "arn": "arn:aws:s3:::prod-customer-pii-demo-vault",
+      "owner_id": "usr_emily_zhang",
+      "description": "Encrypted AWS S3 bucket with customer demographic and billing data"
+    },
+    "provenance": {
+      "source_system": "aws_iam",
+      "source_record_id": "aws_s3_9182",
+      "observed_at": "2026-07-07T00:00:00.000Z",
+      "confidence": 0.85
+    }
+  },
+  {
+    "id": "repo_public_docs",
+    "type": "Repository",
+    "name": "public-docs",
+    "tenant_id": "tenant_demo_corp",
+    "properties": {
+      "sensitivity_label": "low",
+      "cloud_provider": "github",
+      "owner_id": "usr_sarah_connor",
+      "description": "Public markdown documentation repository"
+    },
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_repo_1021",
+      "observed_at": "2026-10-09T18:00:00.000Z",
+      "confidence": 1.0
+    }
+  }
+]

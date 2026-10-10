@@ -1,0 +1,116 @@
+[
+  {
+    "id": "ev_wd_nisha",
+    "source_system": "workday",
+    "entity_type": "Worker",
+    "external_id": "wd_emp_98231",
+    "payload": {
+      "user_id": "usr_nisha_patel",
+      "full_name": "Nisha Patel",
+      "email": "nisha.contractor@partner.example.com",
+      "worker_type": "Contingent Worker",
+      "status": "terminated",
+      "termination_date": "2026-09-10",
+      "cost_center": "CC-ENG-902",
+      "manager_id": "usr_emily_zhang"
+    },
+    "observed_at": "2026-09-10T02:00:00.000Z",
+    "synced_at": "2026-09-10T02:15:00.000Z"
+  },
+  {
+    "id": "ev_okta_nisha",
+    "source_system": "okta",
+    "entity_type": "User",
+    "external_id": "okta_usr_98231",
+    "payload": {
+      "user_id": "usr_nisha_patel",
+      "email": "nisha.contractor@partner.example.com",
+      "status": "suspended",
+      "last_login": "2026-08-30T14:22:00.000Z",
+      "groups": ["contractors-dev"]
+    },
+    "observed_at": "2026-09-10T02:00:00.000Z",
+    "synced_at": "2026-09-10T02:15:00.000Z"
+  },
+  {
+    "id": "ev_okta_alex",
+    "source_system": "okta",
+    "entity_type": "User",
+    "external_id": "okta_usr_44012",
+    "payload": {
+      "user_id": "usr_alex_rivera",
+      "email": "alex.rivera@example.com",
+      "status": "active",
+      "last_login": "2026-10-10T08:15:00.000Z",
+      "groups": ["engineering-core"]
+    },
+    "observed_at": "2026-10-10T08:30:00.000Z",
+    "synced_at": "2026-10-10T08:35:00.000Z"
+  },
+  {
+    "id": "ev_wd_marcus",
+    "source_system": "workday",
+    "entity_type": "Worker",
+    "external_id": "wd_emp_77190",
+    "payload": {
+      "user_id": "usr_marcus_vance",
+      "full_name": "Marcus Vance",
+      "email": "marcus.vance@partner.example.com",
+      "worker_type": "Contingent Worker",
+      "status": "terminated",
+      "termination_date": "2026-09-30",
+      "cost_center": "CC-DATA-401"
+    },
+    "observed_at": "2026-09-30T04:00:00.000Z",
+    "synced_at": "2026-09-30T04:10:00.000Z"
+  },
+  {
+    "id": "ev_okta_marcus",
+    "source_system": "okta",
+    "entity_type": "User",
+    "external_id": "okta_usr_77190",
+    "payload": {
+      "user_id": "usr_marcus_vance",
+      "email": "marcus.vance@partner.example.com",
+      "status": "active",
+      "last_login": "2026-07-07T11:00:00.000Z",
+      "groups": ["contractors-cloud"]
+    },
+    "observed_at": "2026-07-07T00:00:00.000Z",
+    "synced_at": "2026-07-07T00:05:00.000Z"
+  },
+  {
+    "id": "ev_okta_liam",
+    "source_system": "okta",
+    "entity_type": "User",
+    "external_id": "okta_usr_55198",
+    "payload": {
+      "user_id": "usr_liam_chen",
+      "email": "liam.chen@example.com",
+      "status": "active",
+      "last_login": "2026-10-09T16:00:00.000Z",
+      "groups": ["marketing-interns"]
+    },
+    "observed_at": "2026-10-09T18:00:00.000Z",
+    "synced_at": "2026-10-09T18:15:00.000Z"
+  },
+  {
+    "id": "ev_gh_billing_repo",
+    "source_system": "github",
+    "entity_type": "Repository",
+    "external_id": "gh_repo_9088",
+    "payload": {
+      "repo_name": "billing-api",
+      "visibility": "private",
+      "topics": ["payments", "pci-dss", "sensitive"],
+      "teams": [
+        {
+          "slug": "engineering-core",
+          "permission": "read"
+        }
+      ]
+    },
+    "observed_at": "2026-10-10T01:00:00.000Z",
+    "synced_at": "2026-10-10T01:05:00.000Z"
+  }
+]

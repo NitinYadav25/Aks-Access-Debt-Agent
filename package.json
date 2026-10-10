@@ -1,0 +1,28 @@
+{
+  "name": "aks-access-graph",
+  "version": "0.1.0",
+  "description": "Aks: Explainable graph-grounded agent for finding stale or ownerless access paths",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "security-graph",
+    "mcp",
+    "access-debt",
+    "explainable-ai",
+    "iam"
+  ],
+  "author": "Aks Engineering Team",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.1",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}

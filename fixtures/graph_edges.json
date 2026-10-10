@@ -1,0 +1,149 @@
+[
+  {
+    "id": "edge_nisha_contractors",
+    "source_id": "usr_nisha_patel",
+    "target_id": "grp_contractors_dev",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_membership_881",
+      "observed_at": "2026-09-10T02:00:00.000Z",
+      "confidence": 0.95
+    }
+  },
+  {
+    "id": "edge_contractors_eng",
+    "source_id": "grp_contractors_dev",
+    "target_id": "grp_engineering_core",
+    "type": "NESTED_IN",
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_team_nest_44",
+      "observed_at": "2026-10-08T12:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_eng_repo_reader",
+    "source_id": "grp_engineering_core",
+    "target_id": "role_repo_reader",
+    "type": "ASSUMES_ROLE",
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_role_binding_102",
+      "observed_at": "2026-10-08T12:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_reader_billing",
+    "source_id": "role_repo_reader",
+    "target_id": "repo_billing_api",
+    "type": "GRANTS_ACCESS",
+    "permission": "read",
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_repo_grant_9088",
+      "observed_at": "2026-10-10T01:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_alex_eng",
+    "source_id": "usr_alex_rivera",
+    "target_id": "grp_engineering_core",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_membership_992",
+      "observed_at": "2026-10-10T08:30:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_marcus_cloud",
+    "source_id": "usr_marcus_vance",
+    "target_id": "grp_contractors_cloud",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_membership_712",
+      "observed_at": "2026-07-07T00:00:00.000Z",
+      "confidence": 0.6
+    }
+  },
+  {
+    "id": "edge_cloud_analyst",
+    "source_id": "grp_contractors_cloud",
+    "target_id": "role_data_analyst",
+    "type": "ASSUMES_ROLE",
+    "provenance": {
+      "source_system": "aws_iam",
+      "source_record_id": "aws_role_bind_231",
+      "observed_at": "2026-07-07T00:00:00.000Z",
+      "confidence": 0.8
+    }
+  },
+  {
+    "id": "edge_analyst_pii",
+    "source_id": "role_data_analyst",
+    "target_id": "cloud_customer_pii",
+    "type": "GRANTS_ACCESS",
+    "permission": "read",
+    "provenance": {
+      "source_system": "aws_iam",
+      "source_record_id": "aws_iam_policy_877",
+      "observed_at": "2026-07-07T00:00:00.000Z",
+      "confidence": 0.85
+    }
+  },
+  {
+    "id": "edge_liam_marketing",
+    "source_id": "usr_liam_chen",
+    "target_id": "grp_marketing_interns",
+    "type": "MEMBER_OF",
+    "provenance": {
+      "source_system": "okta",
+      "source_record_id": "okta_membership_102",
+      "observed_at": "2026-10-09T18:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_marketing_docs",
+    "source_id": "grp_marketing_interns",
+    "target_id": "repo_public_docs",
+    "type": "GRANTS_ACCESS",
+    "permission": "read",
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_repo_grant_1021",
+      "observed_at": "2026-10-09T18:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_emily_owns_billing",
+    "source_id": "usr_emily_zhang",
+    "target_id": "repo_billing_api",
+    "type": "OWNS",
+    "provenance": {
+      "source_system": "github",
+      "source_record_id": "gh_owner_9088",
+      "observed_at": "2026-10-10T01:00:00.000Z",
+      "confidence": 1.0
+    }
+  },
+  {
+    "id": "edge_emily_owns_pii",
+    "source_id": "usr_emily_zhang",
+    "target_id": "cloud_customer_pii",
+    "type": "OWNS",
+    "provenance": {
+      "source_system": "aws_iam",
+      "source_record_id": "aws_owner_9182",
+      "observed_at": "2026-07-07T00:00:00.000Z",
+      "confidence": 0.95
+    }
+  }
+]

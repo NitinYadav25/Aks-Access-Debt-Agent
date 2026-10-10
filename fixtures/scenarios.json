@@ -1,0 +1,45 @@
+[
+  {
+    "id": "scenario_1_departed_contractor",
+    "name": "Departed Contractor Nested Access Path",
+    "description": "Nisha Patel's contract ended 30 days ago, but her nested group membership still grants read access to billing-api.",
+    "question": "Nisha's contract ended last month. Can her account still reach the production billing repository? If so, propose a safe fix.",
+    "subject_id": "usr_nisha_patel",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_hops": 4,
+    "expected_candidate_edge_id": "edge_nisha_contractors",
+    "notes": "Must identify 4-hop chain and propose minimal edge removal without affecting peer Alex Rivera."
+  },
+  {
+    "id": "scenario_2_current_employee",
+    "name": "Current Employee Legitimate Access Verification",
+    "description": "Alex Rivera is an active engineer with valid access to billing-api that must not be disrupted.",
+    "question": "Can Alex Rivera access billing-api, and will the proposed remediation for contractors impact his access?",
+    "subject_id": "usr_alex_rivera",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "PATH_FOUND",
+    "expected_hops": 3,
+    "notes": "Access is legitimate; simulation of Nisha's remediation must prove Alex's access remains intact."
+  },
+  {
+    "id": "scenario_3_conflicting_source",
+    "name": "Stale and Conflicting Source Record (Uncertainty)",
+    "description": "Marcus Vance has conflicting HR (terminated 10d ago) and Okta records (active from 95d ago).",
+    "question": "Can Marcus Vance reach customer PII data in the cloud account?",
+    "subject_id": "usr_marcus_vance",
+    "target_id": "cloud_customer_pii",
+    "expected_verdict": "INSUFFICIENT_DATA",
+    "notes": "Conflicting status between Workday and Okta must trigger INSUFFICIENT_DATA and block remediation."
+  },
+  {
+    "id": "scenario_4_no_path_fresh",
+    "name": "Fresh Data Verified Absence of Path",
+    "description": "Liam Chen is in marketing-interns with fresh records and no reachability to billing-api.",
+    "question": "Does Liam Chen have any indirect access to billing-api?",
+    "subject_id": "usr_liam_chen",
+    "target_id": "repo_billing_api",
+    "expected_verdict": "NO_PATH_FOUND",
+    "notes": "Must return definitive NO_PATH_FOUND accompanied by source freshness confirmation."
+  }
+]
