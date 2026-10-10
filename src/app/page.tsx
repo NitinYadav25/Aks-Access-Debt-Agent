@@ -141,12 +141,15 @@ export default function AksConsolePage() {
           </div>
         </div>
         <div className="header-badges">
+          <div className="protocol-badge" style={{ borderColor: result?.engine_mode === 'model' ? 'rgba(168, 85, 247, 0.4)' : 'rgba(56, 189, 248, 0.4)', color: result?.engine_mode === 'model' ? '#c084fc' : '#38bdf8' }}>
+            <span className="pulse-indicator" style={{ backgroundColor: result?.engine_mode === 'model' ? '#c084fc' : '#38bdf8', boxShadow: `0 0 8px ${result?.engine_mode === 'model' ? '#c084fc' : '#38bdf8'}` }}></span>
+            {result?.engine_mode === 'model' ? '🤖 Model Mode (Server Key)' : '⚡ Deterministic Mode (Keyless)'}
+          </div>
           <div className="protocol-badge">
-            <span className="pulse-indicator"></span>
             MCP Protocol Active
           </div>
           <div className="protocol-badge" style={{ borderColor: 'rgba(16, 185, 129, 0.3)', color: '#34d399' }}>
-            Zero Mutation Sandbox
+            Zero Live Mutation Sandbox
           </div>
         </div>
       </header>
@@ -190,6 +193,9 @@ export default function AksConsolePage() {
           {loading ? 'Traversing Graph...' : 'Investigate Access'}
         </button>
       </section>
+      <div style={{ fontSize: 11, color: '#64748b', marginTop: -20, marginBottom: 24, paddingLeft: 4 }}>
+        ⚡ Running in <strong>Deterministic Demo Mode</strong>: Powered by typed in-memory graph traversal via MCP. No third-party API keys required.
+      </div>
 
       {error && (
         <div className="uncertainty-box" style={{ borderColor: 'rgba(244, 63, 94, 0.4)', background: 'rgba(244, 63, 94, 0.1)' }}>

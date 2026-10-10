@@ -2,10 +2,11 @@ import { AksMcpClient } from '../mcp/client';
 import { InMemoryAccessGraph } from '../core/graph';
 import { CandidateRankingEngine } from '../core/ranking';
 import { FreshnessEvaluator } from '../core/freshness';
-import { RawEvidenceRecord, SimulationResult } from '../core/types';
+import { Provenance, RawEvidenceRecord, SimulationResult } from '../core/types';
 import { ExplainablePriorityCalculator } from './priority';
 import { EvidenceValidator } from './validator';
 import { IntentResolver } from './intent';
+import { ModelEngine } from './model-engine';
 import {
   AccessPathSummary,
   AccessPathSummaryEdge,
@@ -18,6 +19,7 @@ export interface AksAgentOrchestratorOptions {
   mcpClient: AksMcpClient;
   graph: InMemoryAccessGraph;
   rawEvidence: RawEvidenceRecord[];
+  modelEngine?: ModelEngine;
 }
 
 export class AksAgentOrchestrator {
@@ -29,6 +31,7 @@ export class AksAgentOrchestrator {
   private intentResolver: IntentResolver;
   private rankingEngine: CandidateRankingEngine;
   private freshnessEvaluator: FreshnessEvaluator;
+  private modelEngine: ModelEngine;
 
   constructor(options: AksAgentOrchestratorOptions) {
     this.mcpClient = options.mcpClient;
@@ -42,6 +45,7 @@ export class AksAgentOrchestrator {
       referenceDate: new Date('2026-10-10T00:00:00.000Z'),
       maxAgeDays: 30,
     });
+    this.modelEngine = options.modelEngine || new ModelEngine();
   }
 
   /**
@@ -56,12 +60,15 @@ export class AksAgentOrchestrator {
       throw new Error('Required MCP tools are missing from server.');
     }
 
-    // Step 2: Resolve question intent into bounded query parameters
+    // Step 2: Verify Graph Schema via MCP
+    await this.mcpClient.callTool('get_graph_schema', {});
+
+    // Step 3: Resolve question intent into bounded query parameters
     const intent = this.intentResolver.resolveIntent(query);
     const subjectNode = this.graph.getNode(intent.subject_id);
     const targetNode = intent.target_id ? this.graph.getNode(intent.target_id) : undefined;
 
-    // Step 3: Invoke MCP find_access_paths
+    // Step 4: Invoke MCP find_access_paths
     interface McpPathResult {
       source_id: string;
       total_paths_found: number;
@@ -79,7 +86,7 @@ export class AksAgentOrchestrator {
       max_hops: intent.max_hops,
     });
 
-    // Step 4: Gather Entity IDs along discovered paths to inspect evidence
+    // Step 5: Gather Entity IDs along discovered paths to inspect evidence
     const entityIdsToFetch = new Set<string>([intent.subject_id]);
     if (intent.target_id) entityIdsToFetch.add(intent.target_id);
 
@@ -88,12 +95,41 @@ export class AksAgentOrchestrator {
       for (const e of p.edges) entityIdsToFetch.add(e.id);
     }
 
-    // Step 5: Invoke MCP get_entity_evidence
-    await this.mcpClient.callTool('get_entity_evidence', {
+    // Step 6: Invoke MCP get_entity_evidence and strictly consume its response
+    interface McpEvidenceResult {
+      requested_count: number;
+      found_count: number;
+      entities: Array<{
+        id: string;
+        kind: 'node' | 'edge';
+        type: string;
+        name?: string;
+        provenance: { source_system: string; source_record_id: string; observed_at: string; confidence: number };
+        properties?: Record<string, unknown>;
+        source_id?: string;
+        target_id?: string;
+        permission?: string;
+      }>;
+      raw_source_records: Array<{
+        id: string;
+        source_system: string;
+        entity_type: string;
+        external_id: string;
+        payload: Record<string, unknown>;
+        observed_at: string;
+        synced_at: string;
+      }>;
+      freshness: Array<{ entity_id: string; age_days: number; is_stale: boolean }>;
+    }
+
+    const evidenceResponse = await this.mcpClient.callTool<McpEvidenceResult>('get_entity_evidence', {
       entity_ids: Array.from(entityIdsToFetch),
     });
 
-    // Build structured path summaries with edge metadata
+    // Build lookup maps strictly from MCP evidence payload (no direct internal storage bypass)
+    const mcpEntitiesMap = new Map(evidenceResponse.entities.map((ent) => [ent.id, ent]));
+
+    // Build structured path summaries strictly from MCP tool outputs
     const pathSummaries: AccessPathSummary[] = pathsResponse.paths.map((p) => {
       const summaryNodes: AccessPathSummaryNode[] = p.nodes.map((n) => ({
         id: n.id,
@@ -104,20 +140,21 @@ export class AksAgentOrchestrator {
       }));
 
       const summaryEdges: AccessPathSummaryEdge[] = p.edges.map((e) => {
-        const edgeObj = this.graph.getEdge(e.id);
-        const sourceN = this.graph.getNode(e.source_id);
-        const targetN = this.graph.getNode(e.target_id);
+        const mcpEdge = mcpEntitiesMap.get(e.id);
+        const mcpSource = mcpEntitiesMap.get(e.source_id);
+        const mcpTarget = mcpEntitiesMap.get(e.target_id);
+
         return {
           id: e.id,
           type: e.type,
           source_id: e.source_id,
           target_id: e.target_id,
-          source_name: sourceN?.name || e.source_id,
-          target_name: targetN?.name || e.target_id,
+          source_name: mcpSource?.name || e.source_id,
+          target_name: mcpTarget?.name || e.target_id,
           permission: e.permission,
-          source_system: edgeObj?.provenance.source_system || 'system',
+          source_system: mcpEdge?.provenance?.source_system || 'system',
           observed_at: e.observed_at,
-          record_id: edgeObj?.provenance.source_record_id || 'unknown_record',
+          record_id: mcpEdge?.provenance?.source_record_id || 'unknown_record',
         };
       });
 
@@ -132,64 +169,65 @@ export class AksAgentOrchestrator {
       };
     });
 
-    // Step 6: Validate all cited entities and paths through EvidenceValidator
+    // Step 7: Validate all cited entities and paths through EvidenceValidator
     const validationStatus = this.validator.validatePaths(pathSummaries);
 
-    // Step 7: Check Freshness and Conflict status
-    let freshnessAssessment = this.freshnessEvaluator.evaluateNodeFreshness(
-      subjectNode || {
-        id: intent.subject_id,
-        name: intent.subject_name,
-        type: 'Identity',
-        tenant_id: 'default',
-        properties: {},
-        provenance: { source_system: 'okta', source_record_id: 'unknown', observed_at: new Date().toISOString(), confidence: 1 },
-      }
-    );
+    // Step 8: Check Freshness and Conflict status using MCP evidence records
+    const subjectMcpNode = mcpEntitiesMap.get(intent.subject_id);
+    let freshnessAssessment = this.freshnessEvaluator.evaluateNodeFreshness({
+      id: intent.subject_id,
+      name: intent.subject_name,
+      type: 'Identity',
+      tenant_id: 'tenant_demo_corp',
+      properties: subjectMcpNode?.properties || {},
+      provenance: (subjectMcpNode?.provenance as Provenance) || {
+        source_system: 'okta',
+        source_record_id: 'unknown',
+        observed_at: new Date().toISOString(),
+        confidence: 1,
+      },
+    });
 
     const uncertaintyNotes: string[] = [];
 
-    // If paths exist, check path-wide freshness and conflict
-    if (pathsResponse.paths.length > 0) {
-      // Find full AccessPath object from graph for deep evaluation
-      const rawPaths = this.graph.getAllNodes();
-      // Check subject conflicts
-      const subjectEvidence = this.rawEvidence.filter(
-        (e) => e.payload.user_id === intent.subject_id || e.payload.email === subjectNode?.properties.email
+    // Check cross-source conflict strictly from MCP raw_source_records
+    const subjectRawEvidence = evidenceResponse.raw_source_records.filter(
+      (r) =>
+        r.payload.user_id === intent.subject_id ||
+        (subjectMcpNode?.properties?.email && r.payload.email === subjectMcpNode.properties.email)
+    );
+
+    const wd = subjectRawEvidence.find((e) => e.source_system === 'workday');
+    const okta = subjectRawEvidence.find((e) => e.source_system === 'okta');
+
+    const isInactive = (s: unknown) => s === 'terminated' || s === 'suspended' || s === 'deprovisioned';
+    const isActive = (s: unknown) => s === 'active';
+    const isStatusConflict =
+      wd &&
+      okta &&
+      ((isActive(wd.payload.status) && isInactive(okta.payload.status)) ||
+        (isInactive(wd.payload.status) && isActive(okta.payload.status)));
+
+    if (isStatusConflict && wd && okta) {
+      freshnessAssessment = {
+        verdict: 'CONFLICT',
+        is_acceptable: false,
+        max_age_days: 30,
+        stale_records: [],
+        conflicts: [
+          {
+            entity_id: intent.subject_id,
+            field: 'status',
+            source_a: { system: 'workday', value: wd.payload.status, observed_at: wd.observed_at },
+            source_b: { system: 'okta', value: okta.payload.status, observed_at: okta.observed_at },
+            reason: `Workday reports status '${wd.payload.status}' but Okta reports '${okta.payload.status}'`,
+          },
+        ],
+        summary: `Conflicting source records detected for ${intent.subject_name}. Workday reports '${wd.payload.status}' while Okta reports '${okta.payload.status}'.`,
+      };
+      uncertaintyNotes.push(
+        `Conflicting HR vs Identity status: Workday observed ${wd.observed_at.split('T')[0]} (${wd.payload.status}) contradicts Okta observed ${okta.observed_at.split('T')[0]} (${okta.payload.status}).`
       );
-
-      const wd = subjectEvidence.find((e) => e.source_system === 'workday');
-      const okta = subjectEvidence.find((e) => e.source_system === 'okta');
-
-      const isInactive = (s: unknown) => s === 'terminated' || s === 'suspended' || s === 'deprovisioned';
-      const isActive = (s: unknown) => s === 'active';
-      const isStatusConflict =
-        wd &&
-        okta &&
-        ((isActive(wd.payload.status) && isInactive(okta.payload.status)) ||
-          (isInactive(wd.payload.status) && isActive(okta.payload.status)));
-
-      if (isStatusConflict && wd && okta) {
-        freshnessAssessment = {
-          verdict: 'CONFLICT',
-          is_acceptable: false,
-          max_age_days: 30,
-          stale_records: [],
-          conflicts: [
-            {
-              entity_id: intent.subject_id,
-              field: 'status',
-              source_a: { system: 'workday', value: wd.payload.status, observed_at: wd.observed_at },
-              source_b: { system: 'okta', value: okta.payload.status, observed_at: okta.observed_at },
-              reason: `Workday reports status '${wd.payload.status}' but Okta reports '${okta.payload.status}'`,
-            },
-          ],
-          summary: `Conflicting source records detected for ${intent.subject_name}. Workday reports '${wd.payload.status}' while Okta reports '${okta.payload.status}'.`,
-        };
-        uncertaintyNotes.push(
-          `Conflicting HR vs Identity status: Workday observed ${wd.observed_at.split('T')[0]} (${wd.payload.status}) contradicts Okta observed ${okta.observed_at.split('T')[0]} (${okta.payload.status}).`
-        );
-      }
     }
 
     // Step 8: Branch verdicts based on path existence, employee legitimacy, and data conflicts
@@ -293,6 +331,7 @@ export class AksAgentOrchestrator {
       question: query.question,
       verdict,
       verdict_badge: verdictBadge,
+      engine_mode: this.modelEngine.getEngineMode(),
       summary_explanation: summaryExplanation,
       priority: priorityScore,
       paths: pathSummaries,

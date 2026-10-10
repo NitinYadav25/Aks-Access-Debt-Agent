@@ -56,6 +56,7 @@ export interface InvestigationResult {
   question: string;
   verdict: Verdict;
   verdict_badge: 'HIGH_RISK_PATH' | 'LEGITIMATE_ACCESS' | 'INSUFFICIENT_DATA' | 'SAFE_NO_PATH';
+  engine_mode: 'deterministic' | 'model';
   summary_explanation: string;
   priority: PriorityScore;
   paths: AccessPathSummary[];
