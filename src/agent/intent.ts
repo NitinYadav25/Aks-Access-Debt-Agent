@@ -32,19 +32,39 @@ export class IntentResolver {
         .getAllNodes()
         .filter((n) => n.type === 'Identity');
 
-      for (const idNode of allIdentities) {
-        const firstName = idNode.name.toLowerCase().split(' ')[0];
+      // Sort by name length descending so longer/full names match first
+      const sortedIdentities = [...allIdentities].sort((a, b) => b.name.length - a.name.length);
+
+      for (const idNode of sortedIdentities) {
+        const nameParts = idNode.name.toLowerCase().split(/\s+/);
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts[nameParts.length - 1] || '';
         const fullName = idNode.name.toLowerCase();
-        if (lowerQ.includes(firstName) || lowerQ.includes(fullName) || lowerQ.includes(idNode.id.toLowerCase())) {
+        const idLower = idNode.id.toLowerCase();
+        const email = String(idNode.properties.email || '').toLowerCase();
+        const emailPrefix = email.split('@')[0] || '';
+
+        // Check full name, first name, last name, ID, or email match
+        const matches =
+          lowerQ.includes(fullName) ||
+          (firstName.length > 2 && lowerQ.includes(firstName)) ||
+          (lastName.length > 2 && lowerQ.includes(lastName)) ||
+          lowerQ.includes(idLower) ||
+          (emailPrefix.length > 2 && lowerQ.includes(emailPrefix)) ||
+          (idNode.properties.is_service_account &&
+            (lowerQ.includes('service account') || lowerQ.includes('bot') || lowerQ.includes('ci/cd')));
+
+        if (matches) {
           subjectId = idNode.id;
           break;
         }
       }
     }
 
-    // Default fallback to first identity if not found
+    // Default fallback to first identity or usr_nisha_patel if still not found
     if (!subjectId) {
-      subjectId = 'usr_nisha_patel';
+      const defaultNode = this.graph.getNode('usr_nisha_patel');
+      subjectId = defaultNode ? defaultNode.id : this.graph.getAllNodes().find((n) => n.type === 'Identity')?.id || 'usr_nisha_patel';
     }
 
     const subjectNode = this.graph.getNode(subjectId);
@@ -56,14 +76,25 @@ export class IntentResolver {
         .getAllNodes()
         .filter((n) => n.type === 'Repository' || n.type === 'CloudResource');
 
-      for (const resNode of allResources) {
+      // Sort by name length descending
+      const sortedResources = [...allResources].sort((a, b) => b.name.length - a.name.length);
+
+      for (const resNode of sortedResources) {
         const lowerResName = resNode.name.toLowerCase();
+        const cleanName = lowerResName.replace(/^(repo_|cloud_|s3:\/\/|arn:[^/]+\/|rds:|kms\/)/, '');
+        const idLower = resNode.id.toLowerCase();
+
         if (
           lowerQ.includes(lowerResName) ||
-          lowerQ.includes(resNode.id.toLowerCase()) ||
-          (lowerQ.includes('billing') && lowerResName.includes('billing')) ||
-          (lowerQ.includes('pii') && lowerResName.includes('pii')) ||
-          (lowerQ.includes('customer') && lowerResName.includes('customer'))
+          lowerQ.includes(cleanName) ||
+          lowerQ.includes(idLower) ||
+          (lowerQ.includes('billing') && (lowerResName.includes('billing') || idLower.includes('billing'))) ||
+          (lowerQ.includes('pii') && (lowerResName.includes('pii') || idLower.includes('pii'))) ||
+          (lowerQ.includes('customer') && (lowerResName.includes('customer') || idLower.includes('customer'))) ||
+          (lowerQ.includes('terraform') && (lowerResName.includes('terraform') || idLower.includes('infra'))) ||
+          (lowerQ.includes('database') && (lowerResName.includes('db') || lowerResName.includes('aurora') || lowerResName.includes('postgres') || idLower.includes('rds'))) ||
+          (lowerQ.includes('backup') && (lowerResName.includes('backup') || idLower.includes('backups'))) ||
+          (lowerQ.includes('key') && (lowerResName.includes('key') || idLower.includes('kms')))
         ) {
           targetId = resNode.id;
           break;

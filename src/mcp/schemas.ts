@@ -44,3 +44,11 @@ export const CreateRemediationDraftInputSchema = z.object({
 });
 
 export type CreateRemediationDraftInput = z.infer<typeof CreateRemediationDraftInputSchema>;
+
+export const FalkorDBCypherQueryInputSchema = z.object({
+  cypher: z.string().min(1).describe('OpenCypher query to execute on FalkorDB access graph'),
+  params: z.record(z.unknown()).optional().describe('Optional query parameters'),
+});
+
+export type FalkorDBCypherQueryInput = z.infer<typeof FalkorDBCypherQueryInputSchema>;
+

@@ -144,10 +144,14 @@ export interface ScenarioDefinition {
 
 export interface RawEvidenceRecord {
   id: string;
+  record_id?: string;
   source_system: 'workday' | 'okta' | 'github' | 'aws_iam';
   entity_type: string;
-  external_id: string;
+  external_id?: string;
+  entity_id?: string;
+  ttl_days?: number;
   payload: Record<string, unknown>;
   observed_at: string;
-  synced_at: string;
+  synced_at?: string;
 }
+

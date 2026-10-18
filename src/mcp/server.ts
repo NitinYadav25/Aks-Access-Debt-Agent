@@ -13,7 +13,10 @@ import {
   GetEntityEvidenceInputSchema,
   SimulateEdgeRemovalInputSchema,
   CreateRemediationDraftInputSchema,
+  FalkorDBCypherQueryInputSchema,
 } from './schemas';
+import { getFalkorDBService } from '../core/falkordb/client';
+
 
 export interface AksMcpServerOptions {
   graph: InMemoryAccessGraph;
@@ -217,6 +220,24 @@ export class AksMcpServer {
               ],
             },
           },
+          {
+            name: 'falkordb_cypher_query',
+            description: 'Execute native OpenCypher queries on the FalkorDB access graph (paths, blast radius, counterfactuals).',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                cypher: {
+                  type: 'string',
+                  description: 'OpenCypher query to execute on FalkorDB',
+                },
+                params: {
+                  type: 'object',
+                  description: 'Optional query parameters map',
+                },
+              },
+              required: ['cypher'],
+            },
+          },
         ],
       };
     });
@@ -367,10 +388,13 @@ export class AksMcpServer {
         const matchingRawEvidence = this.rawEvidence.filter((r) =>
           validated.entity_ids.some(
             (id) =>
-              id === r.payload.user_id ||
-              id === r.payload.email ||
-              id === r.payload.repo_name ||
-              r.id.includes(id)
+              (r.payload && (
+                id === r.payload.user_id ||
+                id === r.payload.email ||
+                id === r.payload.repo_name
+              )) ||
+              (typeof r.id === 'string' && r.id.includes(id)) ||
+              (typeof (r as any).record_id === 'string' && (r as any).record_id.includes(id))
           )
         );
 
@@ -415,6 +439,12 @@ export class AksMcpServer {
         const validated = CreateRemediationDraftInputSchema.parse(args);
         const draft = this.draftStore.createDraft(validated);
         return draft;
+      }
+
+      case 'falkordb_cypher_query': {
+        const validated = FalkorDBCypherQueryInputSchema.parse(args);
+        const falkor = getFalkorDBService();
+        return await falkor.query(validated.cypher, validated.params as any, this.graph);
       }
 
       default:

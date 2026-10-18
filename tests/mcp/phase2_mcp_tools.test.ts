@@ -23,12 +23,13 @@ describe('Aks Phase 2: MCP Server & Tool Layer Protocol Tests', () => {
       const tools = await client.listTools();
       const toolNames = tools.map((t) => t.name);
 
-      expect(toolNames).toHaveLength(5);
+      expect(toolNames).toHaveLength(6);
       expect(toolNames).toContain('get_graph_schema');
       expect(toolNames).toContain('find_access_paths');
       expect(toolNames).toContain('get_entity_evidence');
       expect(toolNames).toContain('simulate_edge_removal');
       expect(toolNames).toContain('create_remediation_draft');
+      expect(toolNames).toContain('falkordb_cypher_query');
 
       for (const tool of tools) {
         expect(tool.description).toBeDefined();

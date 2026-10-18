@@ -84,4 +84,15 @@ ${input.rollback_hint}
   public getAllDrafts(): RemediationDraft[] {
     return Array.from(this.draftsById.values());
   }
+
+  public updateDraftStatus(
+    draftId: string,
+    status: RemediationDraft['status']
+  ): RemediationDraft | undefined {
+    const draft = this.draftsById.get(draftId);
+    if (!draft) return undefined;
+    draft.status = status;
+    return draft;
+  }
 }
+

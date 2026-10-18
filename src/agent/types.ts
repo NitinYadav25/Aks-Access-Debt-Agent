@@ -67,4 +67,10 @@ export interface InvestigationResult {
   tool_traces: ToolAuditLog[];
   uncertainty_notes: string[];
   generated_at: string;
+  falkordb_cypher?: {
+    query: string;
+    engine: string;
+    executionTimeMs?: number;
+  };
 }
+

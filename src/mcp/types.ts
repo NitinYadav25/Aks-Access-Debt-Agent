@@ -14,7 +14,7 @@ export interface ToolAuditLog {
 export interface RemediationDraft {
   draft_id: string;
   idempotency_key: string;
-  status: 'DRAFT_ONLY';
+  status: 'DRAFT_ONLY' | 'APPROVED' | 'APPLIED' | 'REJECTED';
   draft_type: 'github_pr' | 'jira_ticket';
   created_at: string;
   title: string;
